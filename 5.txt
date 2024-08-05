@@ -1,0 +1,67 @@
+Threads and processes are both fundamental concepts in concurrent programming, but they have key differences:
+
+### Processes
+
+1. **Definition**: A process is an independent program in execution. It has its own memory space, resources, and execution context.
+
+2. **Isolation**: Processes run in separate memory spaces and do not share memory directly. Communication between processes requires Inter-Process Communication (IPC) mechanisms like pipes, sockets, or shared memory.
+
+3. **Resource Allocation**: Each process has its own memory and system resources. Processes are more resource-intensive to create and manage compared to threads.
+
+4. **Overhead**: Due to separate memory spaces and resource management, processes have higher overhead in terms of memory and CPU usage.
+
+5. **Communication**: Communication between processes is generally slower and more complex because of the need for IPC.
+
+### Threads
+
+1. **Definition**: A thread is a lightweight unit of execution within a process. Multiple threads within the same process share the same memory space and resources.
+
+2. **Shared Memory**: Threads share the same memory space of their parent process, making inter-thread communication easier and faster compared to inter-process communication.
+
+3. **Resource Allocation**: Threads are more efficient in terms of resource allocation because they share resources like memory with other threads in the same process.
+
+4. **Overhead**: Threads have lower overhead compared to processes, as they share the same address space and resources, making them lighter and faster to create and manage.
+
+5. **Communication**: Communication between threads is faster and easier since they share the same memory space.
+
+### Key Differences
+
+- **Memory Space**: Processes have separate memory spaces; threads share the memory space of their parent process.
+- **Resource Usage**: Processes use more resources (e.g., memory) and are more expensive to create; threads use fewer resources and are cheaper to create.
+- **Communication**: Inter-process communication is more complex and slower; inter-thread communication is simpler and faster.
+- **Isolation**: Processes are isolated from each other; threads are not isolated and can easily interact with other threads in the same process.
+
+### Example in Java
+
+**Creating and Running a Process**:
+```java
+public class ProcessExample {
+    public static void main(String[] args) {
+        try {
+            // Create a process to run a command
+            Process process = Runtime.getRuntime().exec("notepad"); // Example for Windows
+            process.waitFor(); // Wait for the process to complete
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+**Creating and Running a Thread**:
+```java
+class MyThread extends Thread {
+    public void run() {
+        System.out.println("Thread is running: " + Thread.currentThread().getId());
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread();
+        t1.start(); // Start the thread
+    }
+}
+```
+
+In summary, threads are more lightweight and share resources within a process, while processes are independent and have separate memory spaces and resources.

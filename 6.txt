@@ -1,0 +1,81 @@
+In Java, a daemon thread is a special type of thread that runs in the background and does not prevent the JVM from exiting when the program finishes. Daemon threads are typically used for background tasks like garbage collection, monitoring, or other housekeeping activities.
+
+### Creating a Daemon Thread
+
+To create a daemon thread, you need to set the thread’s daemon status before starting it. Here’s how you can do it:
+
+1. **Extend the `Thread` Class**:
+
+   ```java
+   class MyDaemonThread extends Thread {
+       public void run() {
+           while (true) {
+               System.out.println("Daemon thread running...");
+               try {
+                   Thread.sleep(1000); // Sleep for 1 second
+               } catch (InterruptedException e) {
+                   System.out.println("Daemon thread interrupted.");
+               }
+           }
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           MyDaemonThread daemonThread = new MyDaemonThread();
+           daemonThread.setDaemon(true); // Set the thread as daemon
+           daemonThread.start(); // Start the daemon thread
+
+           try {
+               Thread.sleep(5000); // Main thread sleeps for 5 seconds
+           } catch (InterruptedException e) {
+               System.out.println("Main thread interrupted.");
+           }
+           System.out.println("Main thread ending.");
+       }
+   }
+   ```
+
+2. **Implement the `Runnable` Interface**:
+
+   ```java
+   class MyDaemonRunnable implements Runnable {
+       public void run() {
+           while (true) {
+               System.out.println("Daemon runnable running...");
+               try {
+                   Thread.sleep(1000); // Sleep for 1 second
+               } catch (InterruptedException e) {
+                   System.out.println("Daemon runnable interrupted.");
+               }
+           }
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           Thread daemonThread = new Thread(new MyDaemonRunnable());
+           daemonThread.setDaemon(true); // Set the thread as daemon
+           daemonThread.start(); // Start the daemon thread
+
+           try {
+               Thread.sleep(5000); // Main thread sleeps for 5 seconds
+           } catch (InterruptedException e) {
+               System.out.println("Main thread interrupted.");
+           }
+           System.out.println("Main thread ending.");
+       }
+   }
+   ```
+
+### Key Points
+
+1. **Daemon Status**: You must call `setDaemon(true)` before calling `start()` on the thread. Once a thread is started, its daemon status cannot be changed.
+
+2. **JVM Exit**: The JVM will exit when all user threads (non-daemon threads) have completed, even if daemon threads are still running.
+
+3. **Use Cases**: Daemon threads are typically used for background tasks that don’t need to prevent the JVM from exiting, like periodic cleanup or monitoring tasks.
+
+4. **Behavior**: Daemon threads are usually terminated abruptly when the JVM shuts down. They do not guarantee that they will complete their tasks before the JVM exits.
+
+By using daemon threads, you can efficiently handle background tasks without affecting the overall program’s termination.

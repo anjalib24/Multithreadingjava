@@ -1,0 +1,61 @@
+In Java, a thread is a lightweight process that runs concurrently with other threads within a single process. Threads share the same memory space but execute independently. Java provides built-in support for multithreading, allowing you to create and manage threads easily.
+
+### Key Concepts of Threads in Java
+
+1. **Thread Class**: Java's `Thread` class represents a thread of execution. You can create a thread by extending this class and overriding its `run` method.
+
+2. **Runnable Interface**: An alternative to extending the `Thread` class is implementing the `Runnable` interface. You define the `run` method in a class that implements `Runnable` and then pass an instance of that class to a `Thread` object.
+
+3. **Thread Lifecycle**: A thread in Java goes through various states:
+   - **New**: A thread that has been created but not yet started.
+   - **Runnable**: A thread that is ready to run and is waiting for CPU time.
+   - **Blocked**: A thread that is waiting for a resource (like I/O or synchronization) to become available.
+   - **Waiting**: A thread that is waiting indefinitely for another thread to perform a particular action.
+   - **Timed Waiting**: A thread that is waiting for another thread to perform a particular action within a stipulated time.
+   - **Terminated**: A thread that has completed its execution or has been terminated.
+
+4. **Thread Synchronization**: To prevent conflicts when multiple threads access shared resources, Java provides mechanisms like synchronized blocks, methods, and higher-level concurrency utilities from the `java.util.concurrent` package.
+
+5. **Thread Scheduling**: The Java Virtual Machine (JVM) and operating system handle thread scheduling, determining which thread runs and when.
+
+### Creating and Running Threads in Java
+
+Here are two common ways to create threads:
+
+1. **Extending the `Thread` Class**:
+
+   ```java
+   class MyThread extends Thread {
+       public void run() {
+           System.out.println("Thread is running: " + Thread.currentThread().getId());
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           MyThread t1 = new MyThread();
+           t1.start(); // Starts the thread
+       }
+   }
+   ```
+
+2. **Implementing the `Runnable` Interface**:
+
+   ```java
+   class MyRunnable implements Runnable {
+       public void run() {
+           System.out.println("Runnable is running: " + Thread.currentThread().getId());
+       }
+   }
+
+   public class Main {
+       public static void main(String[] args) {
+           Thread thread = new Thread(new MyRunnable());
+           thread.start(); // Starts the thread
+       }
+   }
+   ```
+
+In both examples, the `start` method is used to begin the execution of the thread. The `run` method contains the code that will be executed by the thread.
+
+Threads are fundamental to Java's concurrency model, enabling developers to write efficient, responsive, and scalable applications.

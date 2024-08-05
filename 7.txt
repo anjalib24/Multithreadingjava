@@ -1,0 +1,95 @@
+In Java, `wait()` and `sleep()` are methods used to pause the execution of threads, but they serve different purposes and are used in different contexts.
+
+ `wait()`
+
+- **Definition**: The `wait()` method is used for thread synchronization. It allows a thread to release the lock it holds and wait until another thread notifies it to wake up.
+
+- **Context**: It is used in conjunction with synchronization mechanisms and typically within a synchronized block or method. The thread calling `wait()` must own the monitor (lock) of the object on which `wait()` is called.
+
+- **Usage**: Commonly used in producer-consumer scenarios or other situations where threads need to wait for certain conditions to be met.
+
+- **Example**:
+
+  ```java
+  class SharedResource {
+      private boolean available = false;
+
+      public synchronized void consume() throws InterruptedException {
+          while (!available) {
+              wait(); // Wait until available is true
+          }
+          System.out.println("Consuming resource");
+          available = false;
+          notify(); // Notify other threads waiting on this object
+      }
+
+      public synchronized void produce() {
+          available = true;
+          System.out.println("Producing resource");
+          notify(); // Notify other threads waiting on this object
+      }
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          SharedResource resource = new SharedResource();
+
+          new Thread(() -> {
+              try {
+                  resource.consume();
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }).start();
+
+          new Thread(() -> {
+              resource.produce();
+          }).start();
+      }
+  }
+  ```
+
+### `sleep()`
+
+- **Definition**: The `sleep()` method is used to pause the execution of the current thread for a specified amount of time. It does not release any locks.
+
+- **Context**: It is a static method of the `Thread` class and can be used without any synchronization context. It is typically used for introducing delays or for timing purposes.
+
+- **Usage**: Commonly used to simulate delays, perform periodic actions, or control the execution timing of threads.
+
+- **Example**:
+
+  ```java
+  public class SleepExample {
+      public static void main(String[] args) {
+          Thread thread = new Thread(() -> {
+              for (int i = 0; i < 5; i++) {
+                  System.out.println("Thread running: " + i);
+                  try {
+                      Thread.sleep(1000); // Sleep for 1 second
+                  } catch (InterruptedException e) {
+                      System.out.println("Thread interrupted.");
+                  }
+              }
+          });
+
+          thread.start();
+      }
+  }
+  ```
+
+### Key Differences
+
+1. **Purpose**:
+   - `wait()`: Used for inter-thread communication and synchronization. It allows a thread to wait until another thread signals it to continue.
+   - `sleep()`: Used to introduce a delay in a thread's execution. It does not involve thread communication or synchronization.
+
+2. **Locking**:
+   - `wait()`: Requires the thread to hold the monitor (lock) of the object on which `wait()` is called.
+   - `sleep()`: Does not involve any locks or monitors.
+
+3. **Notification**:
+   - `wait()`: Can be used with `notify()` or `notifyAll()` to wake up waiting threads.
+   - `sleep()`: Does not interact with other threads directly. It simply pauses the thread's execution for a specified period.
+
+Understanding when and how to use these methods can help in designing efficient and synchronized multi-threaded applications.

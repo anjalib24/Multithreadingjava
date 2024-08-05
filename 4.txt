@@ -1,0 +1,49 @@
+In Java, there are two primary ways to implement a thread:
+
+1. **Extending the `Thread` Class**:
+   - **Description**: Create a new class that extends the `Thread` class and override its `run` method. The `run` method contains the code that defines what the thread will execute.
+   - **Example**:
+     ```java
+     class MyThread extends Thread {
+         public void run() {
+             System.out.println("Thread is running: " + Thread.currentThread().getId());
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             MyThread t1 = new MyThread();
+             t1.start(); // Start the thread
+         }
+     }
+     ```
+
+2. **Implementing the `Runnable` Interface**:
+   - **Description**: Create a class that implements the `Runnable` interface and override its `run` method. Then, create a `Thread` object with an instance of this class and start the thread using the `Thread` class.
+   - **Example**:
+     ```java
+     class MyRunnable implements Runnable {
+         public void run() {
+             System.out.println("Runnable is running: " + Thread.currentThread().getId());
+         }
+     }
+
+     public class Main {
+         public static void main(String[] args) {
+             Thread thread = new Thread(new MyRunnable());
+             thread.start(); // Start the thread
+         }
+     }
+     ```
+
+### Differences Between the Two Approaches
+
+- **Extending `Thread` Class**:
+  - You directly subclass `Thread`, which restricts you from extending any other class (since Java does not support multiple inheritance).
+  - Suitable for simple use cases where you don’t need to extend another class.
+
+- **Implementing `Runnable` Interface**:
+  - You implement `Runnable` and can still extend other classes, allowing for more flexible designs.
+  - Preferred when you need to extend another class or when using multiple threads sharing the same `Runnable` instance.
+
+Both methods are used to achieve multithreading in Java, but implementing `Runnable` is often preferred for better flexibility and adherence to Java's design principles.
